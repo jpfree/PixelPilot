@@ -1501,7 +1501,7 @@ private void sendUdp(String tag, int x, int y) {
         });
     }
 
-    @Override
+    //@Override
     // public void onWfbNgStatsChanged(WfbNGStats data) {
     //     runOnUiThread(() -> {
     //         if (data.count_p_all > 0) {
