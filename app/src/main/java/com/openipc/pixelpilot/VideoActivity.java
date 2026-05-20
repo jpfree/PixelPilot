@@ -106,7 +106,7 @@ public class VideoActivity extends AppCompatActivity implements IVideoParamsChan
     };
     protected DecodingInfo mDecodingInfo;
     int lastVideoW = 0, lastVideoH = 0, lastCodec = 1;
-    WfbLinkManager wfbLinkManager;
+    //WfbLinkManager wfbLinkManager;
     BroadcastReceiver batteryReceiver;
     VideoPlayer videoPlayer;
     private ActivityVideoBinding binding;
@@ -753,7 +753,7 @@ private void sendUdp(String tag, int x, int y) {
             editor.putBoolean("adaptive_link_enabled", newState);
             editor.apply();
             // Call instance method on the WfbNgLink instance via the wfbLinkManager.
-            wfbLink.nativeSetAdaptiveLinkEnabled(newState);
+            //wfbLink.nativeSetAdaptiveLinkEnabled(newState);
             return true;
         });
 
@@ -776,7 +776,7 @@ private void sendUdp(String tag, int x, int y) {
                 editor.putInt("adaptive_tx_power", power);
                 editor.apply();
                 // Call instance method on the WfbNgLink instance via the wfbLinkManager.
-                wfbLink.nativeSetTxPower(power);
+                //wfbLink.nativeSetTxPower(power);
                 return true;
             });
         }
@@ -794,7 +794,7 @@ private void sendUdp(String tag, int x, int y) {
             editor.putBoolean("custom_fec_enabled", newState);
             editor.apply();
             // Call instance method on the WfbNgLink instance via the wfbLinkManager.
-            wfbLink.nativeSetUseFec(newState ? 1 : 0);
+            //wfbLink.nativeSetUseFec(newState ? 1 : 0);
             return true;
         });
 
@@ -809,7 +809,7 @@ private void sendUdp(String tag, int x, int y) {
             SharedPreferences.Editor editor = getSharedPreferences("general", MODE_PRIVATE).edit();
             editor.putBoolean("custom_ldpc_enabled", newState);
             editor.apply();
-            wfbLink.nativeSetUseLdpc(newState ? 1 : 0);
+            //wfbLink.nativeSetUseLdpc(newState ? 1 : 0);
             return true;
         });
 
@@ -824,7 +824,7 @@ private void sendUdp(String tag, int x, int y) {
             SharedPreferences.Editor editor = getSharedPreferences("general", MODE_PRIVATE).edit();
             editor.putBoolean("custom_stbc_enabled", newState);
             editor.apply();
-            wfbLink.nativeSetUseStbc(newState ? 1 : 0);
+            //wfbLink.nativeSetUseStbc(newState ? 1 : 0);
             return true;
         });
 
@@ -897,17 +897,17 @@ private void sendUdp(String tag, int x, int y) {
         SharedPreferences prefs = getSharedPreferences("general", MODE_PRIVATE);
         boolean adaptiveEnabled = prefs.getBoolean("adaptive_link_enabled", true);
         int adaptiveTxPower = prefs.getInt("adaptive_tx_power", 20);
-        wfbLink.nativeSetAdaptiveLinkEnabled(adaptiveEnabled);
-        wfbLink.nativeSetTxPower(adaptiveTxPower);
+        //wfbLink.nativeSetAdaptiveLinkEnabled(adaptiveEnabled);
+        //wfbLink.nativeSetTxPower(adaptiveTxPower);
         boolean fecEnabled = prefs.getBoolean("custom_fec_enabled", true);
         wfbLink.nativeSetUseFec(fecEnabled ? 1 : 0);
 
         // LDPC and STBC default options
         boolean ldpcEnabled = prefs.getBoolean("custom_ldpc_enabled", true);
-        wfbLink.nativeSetUseLdpc(ldpcEnabled ? 1 : 0);
+        //wfbLink.nativeSetUseLdpc(ldpcEnabled ? 1 : 0);
 
         boolean stbcEnabled = prefs.getBoolean("custom_stbc_enabled", true);
-        wfbLink.nativeSetUseStbc(stbcEnabled ? 1 : 0);
+        //wfbLink.nativeSetUseStbc(stbcEnabled ? 1 : 0);
 
         setFecThresholdsFromPrefs();
     }
@@ -920,9 +920,9 @@ private void sendUdp(String tag, int x, int y) {
         int recTo3 = prefs.getInt("fec_recovered_to_3", 24);
         int recTo2 = prefs.getInt("fec_recovered_to_2", 14);
         int recTo1 = prefs.getInt("fec_recovered_to_1", 8);
-        if (wfbLink != null) {
-            wfbLink.setFecThresholds(lostTo5, recTo4, recTo3, recTo2, recTo1);
-        }
+        // if (wfbLink != null) {
+        //     wfbLink.setFecThresholds(lostTo5, recTo4, recTo3, recTo2, recTo1);
+        // }
     }
 
     /**
@@ -1169,7 +1169,7 @@ private void sendUdp(String tag, int x, int y) {
             if (dvrUri != null) {
                 startDvr(dvrUri);
             } else {
-                wfbLinkManager.stopAdapters();
+                //wfbLinkManager.stopAdapters();
                 videoPlayer.stop();
                 videoPlayer.stopAudio();
 
@@ -1260,7 +1260,7 @@ private void sendUdp(String tag, int x, int y) {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     setGsKey(inputStream);
                     copyGSKey();
-                    wfbLinkManager.refreshKey();
+                    //wfbLinkManager.refreshKey();
                     inputStream.close();
                 } catch (IOException e) {
                     Log.e(TAG, "Failed to import gs.key from " + uri);
@@ -1350,21 +1350,21 @@ private void sendUdp(String tag, int x, int y) {
         IntentFilter usbFilter = new IntentFilter();
         usbFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         usbFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-        usbFilter.addAction(WfbLinkManager.ACTION_USB_PERMISSION);
+        //usbFilter.addAction(WfbLinkManager.ACTION_USB_PERMISSION);
         IntentFilter batFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
         if (Build.VERSION.SDK_INT >= 33) {
-            registerReceiver(wfbLinkManager, usbFilter, Context.RECEIVER_NOT_EXPORTED);
+            //registerReceiver(wfbLinkManager, usbFilter, Context.RECEIVER_NOT_EXPORTED);
             registerReceiver(batteryReceiver, batFilter, Context.RECEIVER_NOT_EXPORTED);
         } else {
-            registerReceiver(wfbLinkManager, usbFilter);
+            //registerReceiver(wfbLinkManager, usbFilter);
             registerReceiver(batteryReceiver, batFilter);
         }
     }
 
     public void unregisterReceivers() {
         try {
-            unregisterReceiver(wfbLinkManager);
+            //unregisterReceiver(wfbLinkManager);
         } catch (IllegalArgumentException ignored) {
         }
         try {
@@ -1381,7 +1381,7 @@ private void sendUdp(String tag, int x, int y) {
 
         videoPlayer.stop();
         videoPlayer.stopAudio();
-        wfbLinkManager.stopAdapters();
+        //wfbLinkManager.stopAdapters();
 
         // Stop VPN service
         Log.w(TAG, "onPause: stopping service");
@@ -1395,7 +1395,7 @@ private void sendUdp(String tag, int x, int y) {
         MavlinkNative.nativeStop(this);
         handler.removeCallbacks(runnable);
         unregisterReceivers();
-        wfbLinkManager.stopAdapters();
+        //wfbLinkManager.stopAdapters();
         videoPlayer.stop();
         videoPlayer.stopAudio();
         super.onStop();
@@ -1405,13 +1405,13 @@ private void sendUdp(String tag, int x, int y) {
     protected void onResume() {
         registerReceivers();
 
-        wfbLinkManager.setChannel(getChannel(this));
-        wfbLinkManager.setBandwidth(getBandwidth(this));
+        // wfbLinkManager.setChannel(getChannel(this));
+        // wfbLinkManager.setBandwidth(getBandwidth(this));
 
-        // On resume is called when the app is reopened, a device might have been plugged since the last time it started.
-        wfbLinkManager.refreshAdapters();
+        // // On resume is called when the app is reopened, a device might have been plugged since the last time it started.
+        // wfbLinkManager.refreshAdapters();
 
-        wfbLinkManager.startAdapters();
+        // wfbLinkManager.startAdapters();
         videoPlayer.start();
         videoPlayer.startAudio();
 
@@ -1432,9 +1432,9 @@ private void sendUdp(String tag, int x, int y) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("wifi-channel", channel);
         editor.apply();
-        wfbLinkManager.stopAdapters();
-        wfbLinkManager.setChannel(channel);
-        wfbLinkManager.startAdapters();
+        // wfbLinkManager.stopAdapters();
+        // wfbLinkManager.setChannel(channel);
+        // wfbLinkManager.startAdapters();
     }
 
     @Override
@@ -1447,9 +1447,9 @@ private void sendUdp(String tag, int x, int y) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("bandwidth", bandwidth);
         editor.apply();
-        wfbLinkManager.stopAdapters();
-        wfbLinkManager.setBandwidth(bandwidth);
-        wfbLinkManager.startAdapters();
+        // wfbLinkManager.stopAdapters();
+        // wfbLinkManager.setBandwidth(bandwidth);
+        // wfbLinkManager.startAdapters();
     }
 
     @Override
