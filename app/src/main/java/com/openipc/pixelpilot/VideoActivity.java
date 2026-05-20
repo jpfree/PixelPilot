@@ -900,7 +900,7 @@ private void sendUdp(String tag, int x, int y) {
         //wfbLink.nativeSetAdaptiveLinkEnabled(adaptiveEnabled);
         //wfbLink.nativeSetTxPower(adaptiveTxPower);
         boolean fecEnabled = prefs.getBoolean("custom_fec_enabled", true);
-        wfbLink.nativeSetUseFec(fecEnabled ? 1 : 0);
+        //wfbLink.nativeSetUseFec(fecEnabled ? 1 : 0);
 
         // LDPC and STBC default options
         boolean ldpcEnabled = prefs.getBoolean("custom_ldpc_enabled", true);
