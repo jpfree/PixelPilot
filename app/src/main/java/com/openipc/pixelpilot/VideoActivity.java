@@ -1,5 +1,8 @@
 package com.openipc.pixelpilot;
 
+import io.github.controlwear.virtual.joystick.android.JoystickView;
+
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
