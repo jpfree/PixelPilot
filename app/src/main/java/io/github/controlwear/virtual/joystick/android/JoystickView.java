@@ -1,5 +1,10 @@
 package io.github.controlwear.virtual.joystick.android;
 
+import com.openipc.pixelpilot.R;   // ← 必须加
+
+
+package io.github.controlwear.virtual.joystick.android;
+
 
 import android.content.Context;
 import android.content.res.TypedArray;
