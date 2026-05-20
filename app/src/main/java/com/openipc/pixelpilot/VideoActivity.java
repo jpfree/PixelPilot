@@ -81,6 +81,11 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+
 // Most basic implementation of an activity that uses VideoNative to stream a video
 // Into an Android Surface View
 public class VideoActivity extends AppCompatActivity implements IVideoParamsChanged,
@@ -272,9 +277,56 @@ public class VideoActivity extends AppCompatActivity implements IVideoParamsChan
         // Battery Receiver
         setupBatteryReceiver();
 
-        // wfbNg VPN Service
-        startVpnService();
-    }
+// wfbNg VPN Service
+startVpnService();
+
+// ----------------------
+// Virtual Joystick Setup
+// ----------------------
+JoystickView joystickLeft = findViewById(R.id.joystick_left);
+JoystickView joystickRight = findViewById(R.id.joystick_right);
+
+joystickLeft.setOnMoveListener((angle, strength) -> {
+    double rad = Math.toRadians(angle);
+    int x = (int)(strength * Math.cos(rad));
+    int y = (int)(strength * Math.sin(rad));
+    sendUdp("LEFT", x, y);
+});
+
+joystickRight.setOnMoveListener((angle, strength) -> {
+    double rad = Math.toRadians(angle);
+    int x = (int)(strength * Math.cos(rad));
+    int y = (int)(strength * Math.sin(rad));
+    sendUdp("RIGHT", x, y);
+});
+}
+
+// ----------------------
+// UDP Sender
+// ----------------------
+private final String targetIp = "192.168.123.195";   // TODO: 改成你的机器人 IP
+private final int targetPort = 6188;              // TODO: 改成你的端口
+
+private void sendUdp(String tag, int x, int y) {
+    new Thread(() -> {
+        try {
+            String msg = tag + "," + x + "," + y;
+            DatagramSocket socket = new DatagramSocket();
+            byte[] data = msg.getBytes();
+            DatagramPacket packet = new DatagramPacket(
+                    data,
+                    data.length,
+                    InetAddress.getByName(targetIp),
+                    targetPort
+            );
+            socket.send(packet);
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }).start();
+}
+
 
     // ----------------------------------------------------------------------------
     // UI SETUP
