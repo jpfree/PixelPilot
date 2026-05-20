@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.openipc.pixelpilot.databinding.ActivityVideoBinding;
-import com.openipc.wfbngrtl8812.WfbNgLink;
+//import com.openipc.wfbngrtl8812.WfbNgLink;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,7 +21,7 @@ public class WfbLinkManager extends BroadcastReceiver {
     public static final String ACTION_USB_PERMISSION = "com.openipc.pixelpilot.USB_PERMISSION";
     private static final String TAG = "pixelpilot";
     static Map<String, UsbDevice> activeWifiAdapters = new HashMap<>();
-    private final WfbNgLink wfbLink;
+    //private final WfbNgLink wfbLink;
     private final ActivityVideoBinding binding;
     private final Context context;
     private int wifiChannel;
@@ -42,11 +42,11 @@ public class WfbLinkManager extends BroadcastReceiver {
         }
     }
 
-    public WfbLinkManager(Context context, ActivityVideoBinding binding, WfbNgLink wfbNgLink) {
-        this.binding = binding;
-        this.context = context;
-        this.wfbLink = wfbNgLink;
-    }
+    // public WfbLinkManager(Context context, ActivityVideoBinding binding, WfbNgLink wfbNgLink) {
+    //     this.binding = binding;
+    //     this.context = context;
+    //     this.wfbLink = wfbNgLink;
+    // }
 
     public void refreshKey() {
         wfbLink.refreshKey();

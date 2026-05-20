@@ -62,9 +62,9 @@ import com.openipc.pixelpilot.osd.OSDManager;
 import com.openipc.videonative.DecodingInfo;
 import com.openipc.videonative.IVideoParamsChanged;
 import com.openipc.videonative.VideoPlayer;
-import com.openipc.wfbngrtl8812.WfbNGStats;
-import com.openipc.wfbngrtl8812.WfbNGStatsChanged;
-import com.openipc.wfbngrtl8812.WfbNgLink;
+//import com.openipc.wfbngrtl8812.WfbNGStats;
+//import com.openipc.wfbngrtl8812.WfbNGStatsChanged;
+//import com.openipc.wfbngrtl8812.WfbNgLink;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -92,7 +92,7 @@ import java.net.InetAddress;
 // Most basic implementation of an activity that uses VideoNative to stream a video
 // Into an Android Surface View
 public class VideoActivity extends AppCompatActivity implements IVideoParamsChanged,
-        WfbNGStatsChanged, MavlinkUpdate, SettingsChanged {
+        MavlinkUpdate, SettingsChanged {
     private static final String TAG = "pixelpilot";
     private static final int PICK_KEY_REQUEST_CODE = 1;
     private static final int PICK_DVR_REQUEST_CODE = 2;
@@ -118,7 +118,7 @@ public class VideoActivity extends AppCompatActivity implements IVideoParamsChan
     private boolean isVRMode = false;
     private ConstraintLayout constraintLayout;
     private ConstraintSet constraintSet;
-    private WfbNgLink wfbLink;
+    //private WfbNgLink wfbLink;
 
     private static final String PREF_DRONE_USERNAME = "drone_username";
     private static final String PREF_DRONE_PASSWORD = "drone_password";
@@ -359,9 +359,9 @@ private void sendUdp(String tag, int x, int y) {
     private void initializeWfbNg() {
         setDefaultGsKey();
         copyGSKey();
-        wfbLink = new WfbNgLink(this);
-        wfbLink.SetWfbNGStatsChanged(this);
-        wfbLinkManager = new WfbLinkManager(this, binding, wfbLink);
+        //wfbLink = new WfbNgLink(this);
+        //wfbLink.SetWfbNGStatsChanged(this);
+        //wfbLinkManager = new WfbLinkManager(this, binding, wfbLink);
     }
 
     // ----------------------------------------------------------------------------
@@ -1502,71 +1502,71 @@ private void sendUdp(String tag, int x, int y) {
     }
 
     @Override
-    public void onWfbNgStatsChanged(WfbNGStats data) {
-        runOnUiThread(() -> {
-            if (data.count_p_all > 0) {
-                binding.tvMessage.setVisibility(View.INVISIBLE);
-                binding.tvMessage.setText("");
+    // public void onWfbNgStatsChanged(WfbNGStats data) {
+    //     runOnUiThread(() -> {
+    //         if (data.count_p_all > 0) {
+    //             binding.tvMessage.setVisibility(View.INVISIBLE);
+    //             binding.tvMessage.setText("");
 
-                if (data.count_p_dec_err > 0) {
-                    binding.tvLinkStatus.setText("Waiting for session key.");
-                } else {
-                    // NOTE: The order of the entries when being added to the entries array
-                    // determines their position around the center of the chart.
-                    ArrayList<PieEntry> entries = new ArrayList<>();
-                    entries.add(new PieEntry((float) data.count_p_dec_ok / data.count_p_all));
-                    entries.add(new PieEntry((float) data.count_p_fec_recovered / data.count_p_all));
-                    entries.add(new PieEntry((float) data.count_p_lost / data.count_p_all));
+    //             if (data.count_p_dec_err > 0) {
+    //                 binding.tvLinkStatus.setText("Waiting for session key.");
+    //             } else {
+    //                 // NOTE: The order of the entries when being added to the entries array
+    //                 // determines their position around the center of the chart.
+    //                 ArrayList<PieEntry> entries = new ArrayList<>();
+    //                 entries.add(new PieEntry((float) data.count_p_dec_ok / data.count_p_all));
+    //                 entries.add(new PieEntry((float) data.count_p_fec_recovered / data.count_p_all));
+    //                 entries.add(new PieEntry((float) data.count_p_lost / data.count_p_all));
 
-                    PieDataSet dataSet = new PieDataSet(entries, "Link Status");
-                    dataSet.setDrawIcons(false);
-                    dataSet.setDrawValues(false);
+    //                 PieDataSet dataSet = new PieDataSet(entries, "Link Status");
+    //                 dataSet.setDrawIcons(false);
+    //                 dataSet.setDrawValues(false);
 
-                    ArrayList<Integer> colors = new ArrayList<>();
-                    colors.add(getColor(R.color.colorGreen));
-                    colors.add(getColor(R.color.colorYellow));
-                    colors.add(getColor(R.color.colorRed));
-                    dataSet.setColors(colors);
+    //                 ArrayList<Integer> colors = new ArrayList<>();
+    //                 colors.add(getColor(R.color.colorGreen));
+    //                 colors.add(getColor(R.color.colorYellow));
+    //                 colors.add(getColor(R.color.colorRed));
+    //                 dataSet.setColors(colors);
 
-                    PieData pieData = new PieData(dataSet);
-                    pieData.setValueFormatter(new PercentFormatter());
-                    pieData.setValueTextSize(11f);
-                    pieData.setValueTextColor(Color.WHITE);
+    //                 PieData pieData = new PieData(dataSet);
+    //                 pieData.setValueFormatter(new PercentFormatter());
+    //                 pieData.setValueTextSize(11f);
+    //                 pieData.setValueTextColor(Color.WHITE);
 
-                    int rssiColor = getColor(R.color.colorGreenBg);
-                    if (data.avg_rssi < 60 && 30 <= data.avg_rssi) {
-                        rssiColor = getColor(R.color.colorYellow);
-                    } else if (data.avg_rssi < 30) {
-                        rssiColor = getColor(R.color.colorRed);
-                    }
+    //                 int rssiColor = getColor(R.color.colorGreenBg);
+    //                 if (data.avg_rssi < 60 && 30 <= data.avg_rssi) {
+    //                     rssiColor = getColor(R.color.colorYellow);
+    //                 } else if (data.avg_rssi < 30) {
+    //                     rssiColor = getColor(R.color.colorRed);
+    //                 }
 
-                    binding.pcLinkStat.setData(pieData);
-                    binding.pcLinkStat.setCenterTextSize(22);
-                    binding.pcLinkStat.setCenterText("" + data.avg_rssi);
-                    binding.pcLinkStat.setCenterTextColor(rssiColor);
-                    binding.pcLinkStat.invalidate();
+    //                 binding.pcLinkStat.setData(pieData);
+    //                 binding.pcLinkStat.setCenterTextSize(22);
+    //                 binding.pcLinkStat.setCenterText("" + data.avg_rssi);
+    //                 binding.pcLinkStat.setCenterTextColor(rssiColor);
+    //                 binding.pcLinkStat.invalidate();
 
-                    // Set link icon tint color.
-                    int color = getColor(R.color.colorGreenBg);
-                    if ((float) data.count_p_fec_recovered / data.count_p_all > 0.2) {
-                        color = getColor(R.color.colorYellowBg);
-                    }
-                    if (data.count_p_lost > 0) {
-                        color = getColor(R.color.colorRedBg);
-                    }
-                    binding.imgLinkStatus.setImageTintList(ColorStateList.valueOf(color));
+    //                 // Set link icon tint color.
+    //                 int color = getColor(R.color.colorGreenBg);
+    //                 if ((float) data.count_p_fec_recovered / data.count_p_all > 0.2) {
+    //                     color = getColor(R.color.colorYellowBg);
+    //                 }
+    //                 if (data.count_p_lost > 0) {
+    //                     color = getColor(R.color.colorRedBg);
+    //                 }
+    //                 binding.imgLinkStatus.setImageTintList(ColorStateList.valueOf(color));
 
-                    binding.tvLinkStatus.setText(String.format("Outgoing %3d Decoded %3d Recovered %3d Lost %3d",
-                            data.count_p_outgoing,
-                            data.count_p_dec_ok,
-                            data.count_p_fec_recovered,
-                            data.count_p_lost));
-                }
-            } else {
-                binding.tvLinkStatus.setText("No Video Link");
-            }
-        });
-    }
+    //                 binding.tvLinkStatus.setText(String.format("Outgoing %3d Decoded %3d Recovered %3d Lost %3d",
+    //                         data.count_p_outgoing,
+    //                         data.count_p_dec_ok,
+    //                         data.count_p_fec_recovered,
+    //                         data.count_p_lost));
+    //             }
+    //         } else {
+    //             binding.tvLinkStatus.setText("No Video Link");
+    //         }
+    //     });
+    // }
 
     @Override
     public void onNewMavlinkData(MavlinkData data) {
