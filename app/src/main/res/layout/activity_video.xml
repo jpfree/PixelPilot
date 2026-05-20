@@ -708,5 +708,29 @@
                 android:textColor="@android:color/white" />
         </com.openipc.pixelpilot.osd.MovableLayout>
     </FrameLayout>
+    
+<io.github.controlwear.virtual.joystick.android.JoystickView
+    android:id="@+id/joystick_left"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:alpha="0.7"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:layout_margin="20dp"
+    app:JV_buttonColor="#AAFFFFFF"
+    app:JV_borderColor="#55FFFFFF"
+    app:JV_backgroundColor="#33000000" />
+
+<io.github.controlwear.virtual.joystick.android.JoystickView
+    android:id="@+id/joystick_right"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:alpha="0.7"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_margin="20dp"
+    app:JV_buttonColor="#AAFFFFFF"
+    app:JV_borderColor="#55FFFFFF"
+    app:JV_backgroundColor="#33000000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
